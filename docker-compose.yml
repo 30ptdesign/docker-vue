@@ -1,0 +1,25 @@
+# https://mherman.org/blog/dockerizing-a-vue-app/#production
+
+version: '3'
+
+services:
+  app:
+    container_name: vue-app
+    build:
+      context: .
+      dockerfile: docker/dockerfile
+    labels:
+      # traefik V2
+      - traefik.http.routers.wp.rule=Host(`${APP_URL}`)
+
+      # traefik V1
+      # - traefik.backend=vue-app
+      # - traefik.frontend.rule=Host:${APP_URL}
+      # - traefik.docker.network=traefik
+      # - traefik.port=80
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true
